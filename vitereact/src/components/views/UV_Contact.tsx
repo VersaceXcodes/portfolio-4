@@ -3,7 +3,6 @@ import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { createContactRequestInputSchema } from '@/schemas';
-import { useAppStore } from '@/store/main';
 
 const UV_Contact: React.FC = () => {
   const [contactDetails, setContactDetails] = useState({
@@ -15,10 +14,8 @@ const UV_Contact: React.FC = () => {
   const [submissionStatus, setSubmissionStatus] = useState({
     is_submitting: false,
     success: false,
-    error_message: null,
+    error_message: null as string | null,
   });
-
-  const email = useAppStore(state => state.authentication_state.current_user?.email);
 
   const contactMutation = useMutation({
     mutationFn: async ({ name, email, message }: { name: string; email: string; message: string }) => {
@@ -53,7 +50,7 @@ const UV_Contact: React.FC = () => {
     try {
       createContactRequestInputSchema.parse(contactDetails);
       contactMutation.mutate(contactDetails);
-    } catch (error) {
+    } catch {
       setSubmissionStatus(prev => ({ ...prev, error_message: 'Invalid input data.' }));
     }
   };

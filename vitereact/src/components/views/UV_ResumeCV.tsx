@@ -32,7 +32,9 @@ const fetchResumeData = async () => {
 const UV_ResumeCV: React.FC = () => {
   const isAuthenticated = useAppStore(state => state.authentication_state.authentication_status.is_authenticated);
 
-  const { data, isLoading, error } = useQuery(['resumeData'], fetchResumeData, {
+  const { data = { education: [], work_experience: [], skills: [] }, isLoading, error } = useQuery({
+    queryKey: ['resumeData'],
+    queryFn: fetchResumeData,
     staleTime: 600000,
     refetchOnWindowFocus: false,
     retry: 1

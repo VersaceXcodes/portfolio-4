@@ -20,17 +20,19 @@ interface Service {
 }
 
 const UV_HomePage: React.FC = () => {
-  const { data: projects = [], isLoading: isLoadingProjects } = useQuery<Project[]>(
-    ['projects', 'featured'],
-    () => axios.get<Project[]>(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/portfolio?sort_by=created_at&sort_order=desc&limit=3`).then(res => res.data),
-    { staleTime: 60000, refetchOnWindowFocus: false }
-  );
+  const { data: projects = [], isLoading: isLoadingProjects } = useQuery<Project[]>({
+    queryKey: ['projects', 'featured'],
+    queryFn: () => axios.get<Project[]>(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/portfolio?sort_by=created_at&sort_order=desc&limit=3`).then(res => res.data),
+    staleTime: 60000,
+    refetchOnWindowFocus: false
+  });
 
-  const { data: services = [], isLoading: isLoadingServices } = useQuery<Service[]>(
-    ['services', 'overview'],
-    () => axios.get<Service[]>(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/services?limit=3`).then(res => res.data),
-    { staleTime: 60000, refetchOnWindowFocus: false }
-  );
+  const { data: services = [], isLoading: isLoadingServices } = useQuery<Service[]>({
+    queryKey: ['services', 'overview'],
+    queryFn: () => axios.get<Service[]>(`${import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000'}/api/services?limit=3`).then(res => res.data),
+    staleTime: 60000,
+    refetchOnWindowFocus: false
+  });
 
   return (
     <>

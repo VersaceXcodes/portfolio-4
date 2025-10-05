@@ -13,15 +13,13 @@ const fetchProjects = async () => {
 
 const UV_Portfolio: React.FC = () => {
   const [filters, setFilters] = useState<{ category?: string; sortOrder?: 'asc' | 'desc' }>({});
-  const { data: projects, isLoading, error } = useQuery<Project[]>(
-    ['projects', filters],
-    fetchProjects,
-    {
-      staleTime: 60000,
-      refetchOnWindowFocus: false,
-      retry: 1,
-    }
-  );
+  const { data: projects = [], isLoading, error } = useQuery<Project[]>({
+    queryKey: ['projects', filters],
+    queryFn: fetchProjects,
+    staleTime: 60000,
+    refetchOnWindowFocus: false,
+    retry: 1
+  });
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setFilters((prev) => ({ ...prev, [event.target.name]: event.target.value }));

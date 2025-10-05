@@ -1,15 +1,13 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import { z } from 'zod';
 
-// Define the service type
 interface Service {
   service_id: string;
   title: string;
-  description: string;
-  pricing: number;
+  description: string | null;
+  pricing: number | null;
   created_at: Date;
 }
 
@@ -35,15 +33,13 @@ const serviceSchema = z.object({
 
 // Main component
 const UV_Services: React.FC = () => {
-  const { data: services, isLoading, error } = useQuery<Service[], Error>(
-    ['services'],
-    fetchServices,
-    {
-      select: data => data.map(service => serviceSchema.parse(service)),
-      staleTime: 60000,
-      retry: 1
-    }
-  );
+  const { data: services = [], isLoading, error } = useQuery({
+    queryKey: ['services'],
+    queryFn: fetchServices,
+    select: (data: Service[]) => data.map(service => serviceSchema.parse(service)) as Service[],
+    staleTime: 60000,
+    retry: 1
+  });
 
   return (
     <>

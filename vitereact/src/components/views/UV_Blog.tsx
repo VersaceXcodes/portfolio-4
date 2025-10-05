@@ -17,15 +17,17 @@ const fetchBlogPosts = async () => {
 
 const UV_Blog: React.FC = () => {
   const {
-    data: blogPosts,
+    data: blogPosts = [],
     isLoading,
     isError,
     error
-  } = useQuery(['blogPosts'], fetchBlogPosts, {
+  } = useQuery({
+    queryKey: ['blogPosts'],
+    queryFn: fetchBlogPosts,
     staleTime: 60000,
     refetchOnWindowFocus: false,
     retry: 1,
-    select: data => blogPostSchema.array().parse(data)  // Validate and parse with zod
+    select: data => blogPostSchema.array().parse(data)
   });
 
   return (
@@ -49,11 +51,11 @@ const UV_Blog: React.FC = () => {
           ) : (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {blogPosts?.map(post => (
-                <div key={post.post_id} className="rounded-xl bg-white shadow-lg border border-gray-100 overflow-hidden">
+                <div key={post.blog_id} className="rounded-xl bg-white shadow-lg border border-gray-100 overflow-hidden">
                   <div className="p-6">
                     <h2 className="text-2xl font-semibold text-gray-900 mb-2">{post.title}</h2>
                     <p className="text-gray-600 line-clamp-3 mb-4">{post.content}</p>
-                    <Link to={`/blog/${post.post_slug}`} className="text-blue-600 hover:text-blue-700 font-medium">
+                    <Link to={`/blog/${post.blog_id}`} className="text-blue-600 hover:text-blue-700 font-medium">
                       Read More
                     </Link>
                   </div>

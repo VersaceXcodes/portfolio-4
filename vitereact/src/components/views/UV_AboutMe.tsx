@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useAppStore } from '@/store/main';
 
 const UV_AboutMe: React.FC = () => {
   const currentUser = useAppStore(state => state.authentication_state.current_user);

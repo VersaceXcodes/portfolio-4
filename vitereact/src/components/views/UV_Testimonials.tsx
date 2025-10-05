@@ -1,8 +1,7 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
-import { testimonialSchema, Testimonial } from '@/schemas/testimonialSchema'; // Ensure you have this import correctly
+import { testimonialSchema, Testimonial } from '@/schemas/testimonialSchema';
 import { z } from 'zod';
 
 const UV_Testimonials: React.FC = () => {
@@ -11,14 +10,12 @@ const UV_Testimonials: React.FC = () => {
     return z.array(testimonialSchema).parse(response.data);
   };
 
-  const { data: testimonials, isLoading, error } = useQuery<Testimonial[], Error>(
-    ['testimonials'],
-    fetchTestimonials,
-    {
-      staleTime: 60000, // 1 minute
-      retry: 1,
-    }
-  );
+  const { data: testimonials = [], isLoading, error } = useQuery<Testimonial[], Error>({
+    queryKey: ['testimonials'],
+    queryFn: fetchTestimonials,
+    staleTime: 60000,
+    retry: 1
+  });
 
   return (
     <>
@@ -42,17 +39,16 @@ const UV_Testimonials: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {testimonials.map((testimonial) => (
                 <div key={testimonial.testimonial_id} className="bg-white shadow-lg rounded-xl p-6">
-                  <div className="text-lg font-medium text-gray-900 mb-2">{testimonial.content}</div>
-                  {testimonial.rating !== null && (
+                  <div className="text-lg font-medium text-gray-900 mb-2">{testimonial.testimonial_text}</div>
+                  {testimonial.rating !== undefined && testimonial.rating !== null && (
                     <div className="flex items-center">
                       <span className="text-yellow-500">{'★'.repeat(testimonial.rating)}</span>
                       <span className="text-gray-500 ml-2">{'★'.repeat(5 - testimonial.rating)}</span>
                     </div>
                   )}
                   <div className="text-sm text-gray-700 mt-4">
-                    <Link to={`/user/${testimonial.user_id}`} className="underline">
-                      {testimonial.user_id}
-                    </Link>
+                    <p className="font-semibold">{testimonial.client_name}</p>
+                    {testimonial.client_company && <p className="text-gray-500">{testimonial.client_company}</p>}
                   </div>
                 </div>
               ))}
