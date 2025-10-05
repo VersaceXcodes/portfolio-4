@@ -20,12 +20,16 @@ jest.mock('./server.ts', () => {
 describe('Portfolio-4 API tests', () => {
   beforeAll(async () => {
     // Setup and initialize database mock or state
-    await pool.connect().query(`TRUNCATE TABLE users, projects, testimonials, services, blog_posts, contact_requests RESTART IDENTITY;`);
+    const client = await pool.connect();
+    await client.query(`TRUNCATE TABLE users, projects, testimonials, services, blog_posts, contact_requests RESTART IDENTITY;`);
+    client.release();
   });
 
   afterAll(async () => {
     // Gracefully shutdown server and database connection
-    await pool.connect().query(`TRUNCATE TABLE users, projects, testimonials, services, blog_posts, contact_requests RESTART IDENTITY;`);
+    const client = await pool.connect();
+    await client.query(`TRUNCATE TABLE users, projects, testimonials, services, blog_posts, contact_requests RESTART IDENTITY;`);
+    client.release();
     await pool.end();
   });
 

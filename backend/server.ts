@@ -37,8 +37,8 @@ import {
 dotenv.config();
 
 // Error response utility
-function createErrorResponse(message, error = null, errorCode = null) {
-  const response = {
+function createErrorResponse(message: string, error: any = null, errorCode: string | null = null) {
+  const response: any = {
     success: false,
     message,
     timestamp: new Date().toISOString()
@@ -65,7 +65,7 @@ const pool = new Pool(
   DATABASE_URL
     ? { 
         connectionString: DATABASE_URL, 
-        ssl: { require: true } 
+        ssl: { rejectUnauthorized: false } 
       }
     : {
         host: PGHOST,
@@ -73,7 +73,7 @@ const pool = new Pool(
         user: PGUSER,
         password: PGPASSWORD,
         port: Number(PGPORT),
-        ssl: { require: true },
+        ssl: { rejectUnauthorized: false },
       }
 );
 
@@ -108,7 +108,7 @@ const authenticateToken = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET);
+    const decoded = jwt.verify(token, JWT_SECRET) as { user_id: string; email: string };
     const client = await pool.connect();
     
     try {
@@ -628,7 +628,7 @@ app.patch('/api/testimonials/:testimonial_id', authenticateToken, async (req, re
       if (validatedInput.rating !== undefined) {
         paramCount++;
         updateFields.push(`rating = $${paramCount}`);
-        params.push(validatedInput.rating);
+        params.push(String(validatedInput.rating));
       }
 
       if (updateFields.length === 0) {
@@ -810,7 +810,7 @@ app.patch('/api/services/:service_id', authenticateToken, async (req, res) => {
       if (validatedInput.pricing !== undefined) {
         paramCount++;
         updateFields.push(`pricing = $${paramCount}`);
-        params.push(validatedInput.pricing);
+        params.push(String(validatedInput.pricing));
       }
 
       if (updateFields.length === 0) {
@@ -1161,6 +1161,6 @@ app.get(/^(?!\/api).*/, (req, res) => {
 export { app, pool };
 
 // Start the server
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(Number(PORT), '0.0.0.0', () => {
   console.log(`Server running on port ${PORT} and listening on 0.0.0.0`);
 });
