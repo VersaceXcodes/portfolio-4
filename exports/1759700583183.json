@@ -1,0 +1,19 @@
+{
+  "timestamp": 1759700583183,
+  "operation": {
+    "id": "webapp:react:store",
+    "refs": {
+      "id": "redux",
+      "version": "latest"
+    }
+  },
+  "projectId": "portfolio-4",
+  "files": [
+    {
+      "path": "/mnt/data/portfolio-4/vitereact/src/store/main.tsx",
+      "type": "text",
+      "size": 6312,
+      "dependencies": false
+    }
+  ]
+}

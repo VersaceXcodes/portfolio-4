@@ -1,0 +1,255 @@
+asyncapi: 2.0.0
+info:
+  title: Portfolio-4 Realtime API
+  version: 1.0.0
+servers:
+  production:
+    url: ws://localhost:3000
+    protocol: ws
+channels:
+  authentication_state_change:
+    description: Realtime updates of the authentication state.
+    subscribe:
+      summary: Receive updates on user authentication status.
+      message:
+        contentType: application/json
+        payload:
+          type: object
+          properties:
+            current_user:
+              $ref: "#/components/schemas/User"
+            auth_token:
+              type: string
+              nullable: true
+            authentication_status:
+              type: object
+              properties:
+                is_authenticated:
+                  type: boolean
+                is_loading:
+                  type: boolean
+            error_message:
+              type: string
+              nullable: true
+          required:
+            - authentication_status
+  project_update:
+    description: Realtime updates for projects, including creation, updates, and deletions.
+    subscribe:
+      summary: Receive notifications on any changes to projects.
+      message:
+        contentType: application/json
+        oneOf:
+          - type: object
+            properties:
+              event_type:
+                type: string
+                enum:
+                  - project_created
+                  - project_updated
+                  - project_deleted
+              project:
+                $ref: "#/components/schemas/Project"
+            required:
+              - event_type
+              - project
+  testimonial_update:
+    description: Realtime updates for testimonials, including creation, updates, and
+      deletions.
+    subscribe:
+      summary: Receive notifications on any changes to testimonials.
+      message:
+        contentType: application/json
+        oneOf:
+          - type: object
+            properties:
+              event_type:
+                type: string
+                enum:
+                  - testimonial_created
+                  - testimonial_updated
+                  - testimonial_deleted
+              testimonial:
+                $ref: "#/components/schemas/Testimonial"
+            required:
+              - event_type
+              - testimonial
+  service_update:
+    description: Realtime updates for services, including creation, updates, and deletions.
+    subscribe:
+      summary: Receive notifications on any changes to services.
+      message:
+        contentType: application/json
+        oneOf:
+          - type: object
+            properties:
+              event_type:
+                type: string
+                enum:
+                  - service_created
+                  - service_updated
+                  - service_deleted
+              service:
+                $ref: "#/components/schemas/Service"
+            required:
+              - event_type
+              - service
+  blog_post_update:
+    description: Realtime updates for blog posts, including new posts, updates, and
+      deletions.
+    subscribe:
+      summary: Receive notifications on any changes to blog posts.
+      message:
+        contentType: application/json
+        oneOf:
+          - type: object
+            properties:
+              event_type:
+                type: string
+                enum:
+                  - blog_post_created
+                  - blog_post_updated
+                  - blog_post_deleted
+              blog_post:
+                $ref: "#/components/schemas/BlogPost"
+            required:
+              - event_type
+              - blog_post
+  contact_request_received:
+    description: Receive realtime notifications when a new contact request is made.
+    subscribe:
+      summary: Receive notifications on new contact requests.
+      message:
+        contentType: application/json
+        payload:
+          $ref: "#/components/schemas/ContactRequest"
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        user_id:
+          type: string
+        email:
+          type: string
+          format: email
+        name:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - user_id
+        - email
+        - name
+        - created_at
+    Project:
+      type: object
+      properties:
+        project_id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        media_urls:
+          type: string
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+        category:
+          type: string
+          nullable: true
+      required:
+        - project_id
+        - title
+        - created_at
+    Testimonial:
+      type: object
+      properties:
+        testimonial_id:
+          type: string
+        project_id:
+          type: string
+        user_id:
+          type: string
+        content:
+          type: string
+        rating:
+          type: number
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - testimonial_id
+        - project_id
+        - user_id
+        - content
+        - created_at
+    Service:
+      type: object
+      properties:
+        service_id:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+        pricing:
+          type: number
+          nullable: true
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - service_id
+        - title
+        - created_at
+    BlogPost:
+      type: object
+      properties:
+        post_id:
+          type: string
+        post_slug:
+          type: string
+        title:
+          type: string
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        category:
+          type: string
+          nullable: true
+      required:
+        - post_id
+        - post_slug
+        - title
+        - content
+        - created_at
+    ContactRequest:
+      type: object
+      properties:
+        request_id:
+          type: string
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        message:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+      required:
+        - request_id
+        - name
+        - email
+        - message
+        - created_at

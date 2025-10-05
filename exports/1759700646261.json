@@ -1,0 +1,19 @@
+{
+  "timestamp": 1759700646261,
+  "operation": {
+    "id": "webapp:react:views",
+    "refs": {
+      "id": "UV_ResumeCV",
+      "version": "1759700609616"
+    }
+  },
+  "projectId": "portfolio-4",
+  "files": [
+    {
+      "path": "/mnt/data/portfolio-4/vitereact/src/components/views/UV_ResumeCV.tsx",
+      "type": "text",
+      "size": 4546,
+      "dependencies": false
+    }
+  ]
+}

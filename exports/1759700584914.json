@@ -1,0 +1,15 @@
+{
+  "timestamp": 1759700584914,
+  "operation": {
+    "id": "settings:config:package"
+  },
+  "projectId": "portfolio-4",
+  "files": [
+    {
+      "path": "/mnt/data/portfolio-4/vitereact/package.json",
+      "type": "text",
+      "size": 2980,
+      "dependencies": true
+    }
+  ]
+}

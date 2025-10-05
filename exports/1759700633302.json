@@ -1,0 +1,19 @@
+{
+  "timestamp": 1759700633302,
+  "operation": {
+    "id": "webapp:react:views",
+    "refs": {
+      "id": "UV_Blog",
+      "version": "1759700609677"
+    }
+  },
+  "projectId": "portfolio-4",
+  "files": [
+    {
+      "path": "/mnt/data/portfolio-4/vitereact/src/components/views/UV_Blog.tsx",
+      "type": "text",
+      "size": 2480,
+      "dependencies": false
+    }
+  ]
+}
